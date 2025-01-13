@@ -3,8 +3,9 @@ const dateInput = document.getElementById("date-input");
 const addButton = document.getElementById("add-button");
 const alertMessage = document.getElementById("alert-message");
 const todoBody = document.querySelector("tbody");
+const deleteAllButton= document.getElementById("delete-all-button");
 
-const todos = JSON.parse(localStorage.getItem("todos")) || [];
+let todos = JSON.parse(localStorage.getItem("todos")) || [];
 
 const generateId = () => {
   return Math.round(
@@ -42,7 +43,7 @@ const displayTodo = () => {
     <td>${todo.date || "No date"}</td>
     <td>${todo.completed ? "completed" : "pending"}</td>
     <td>
-    <button>Edite</button>   
+    <button>Edit</button>   
     <button>Do</button>
     <button>Delete</button>
     </td>
@@ -50,7 +51,6 @@ const displayTodo = () => {
   });
 };
 
-displayTodo();
 
 const addHandler = () => {
   const task = taskInput.value;
@@ -74,4 +74,18 @@ const addHandler = () => {
   }
 };
 
+const deleteAllHandler = ()=>{
+  if(todos.length){
+    todos=[];
+    saveToLocalStorage();
+    displayTodo();
+    showAlert("All todos deleted successfully", "success")
+  }
+else{
+  showAlert("No task to delete", "error")
+}
+}
+
 addButton.addEventListener("click", addHandler);
+window.addEventListener("load", displayTodo);
+deleteAllButton.addEventListener("click",deleteAllHandler)

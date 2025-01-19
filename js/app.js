@@ -44,7 +44,7 @@ const displayTodo = () => {
     <td>${todo.completed ? "completed" : "pending"}</td>
     <td>
     <button>Edit</button>   
-    <button>Do</button>
+    <button onclick="toggleHandler('${todo.id}')">${todo.completed ? "Undo":"Do"}</button>
     <button onclick="deleteHandler('${todo.id}')">Delete</button>
     </td>
     </tr>`;
@@ -78,7 +78,7 @@ const deleteHandler = (id) => {
   todos = newTodos;
   saveToLocalStorage();
   displayTodo();
-  showAlert("todo deleted successfuly", "success");
+  showAlert("todo deleted successfully", "success");
 };
 
 const deleteAllHandler = () => {
@@ -91,6 +91,14 @@ const deleteAllHandler = () => {
     showAlert("No task to delete", "error");
   }
 };
+
+const toggleHandler = (id)=>{
+  const todo=todos.find(todo=>todo.id===id)
+  todo.completed = !todo.completed;
+  saveToLocalStorage();
+  displayTodo();
+  showAlert("Todo status changed successfully","success")
+}
 
 addButton.addEventListener("click", addHandler);
 window.addEventListener("load", displayTodo);

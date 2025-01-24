@@ -45,7 +45,9 @@ const displayTodo = () => {
     <td>${todo.completed ? "completed" : "pending"}</td>
     <td>
     <button onclick="editHandler('${todo.id}')">Edit</button>   
-    <button onclick="toggleHandler('${todo.id}')">${todo.completed ? "Undo":"Do"}</button>
+    <button onclick="toggleHandler('${todo.id}')">${
+      todo.completed ? "Undo" : "Do"
+    }</button>
     <button onclick="deleteHandler('${todo.id}')">Delete</button>
     </td>
     </tr>`;
@@ -93,22 +95,38 @@ const deleteAllHandler = () => {
   }
 };
 
-const toggleHandler = (id)=>{
-  const todo=todos.find(todo=>todo.id===id)
+const toggleHandler = (id) => {
+  const todo = todos.find((todo) => todo.id === id);
   todo.completed = !todo.completed;
   saveToLocalStorage();
   displayTodo();
-  showAlert("Todo status changed successfully","success")
-}
+  showAlert("Todo status changed successfully", "success");
+};
 
-const editHandler=(id)=>{
-  const todo = todos.find(todo=>todo.id===id);
-  taskInput.value=todo.task;
-  dateInput.value=todo.date;
-  addButton.style.display="none";
-  editButton.style.display="inline-block";
-}
+const editHandler = (id) => {
+  const todo = todos.find((todo) => todo.id === id);
+  taskInput.value = todo.task;
+  dateInput.value = todo.date;
+  addButton.style.display = "none";
+  editButton.style.display = "inline-block";
+  editButton.dataset.id = id;
+};
+
+const applyEditHandler = (event) => {
+  const id = event.target.dataset.id;
+  const todo = todos.find((todo) => todo.id === id);
+  todo.task = taskInput.value;
+  todo.date = dateInput.value;
+  taskInput.value = "";
+  dateInput.value = "";
+  addButton.style.display = "inline-block";
+  editButton.style.display = "none";
+  saveToLocalStorage();
+  displayTodo();
+  showAlert("Todo edited successfully", "success");
+};
 
 addButton.addEventListener("click", addHandler);
 window.addEventListener("load", displayTodo);
 deleteAllButton.addEventListener("click", deleteAllHandler);
+editButton.addEventListener("click", applyEditHandler);
